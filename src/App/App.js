@@ -17,7 +17,7 @@ class App extends React.Component {
       if (user) {
         this.setState({ authed: true });
       } else {
-        this.setState({ authed: true });
+        this.setState({ authed: false });
       }
     });
   }
