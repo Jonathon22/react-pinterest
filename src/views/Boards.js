@@ -1,9 +1,10 @@
 import React from 'react';
+import BoardArea from '../Components/BoardArea';
 
 export default function Boards() {
   return (
     <div>
-      <h1>Boards:For Jon</h1>
+      <BoardArea />
     </div>
   );
 }

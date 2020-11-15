@@ -12,6 +12,7 @@
     "allowTemplateLiterals": true
   },
   "rules": {
+    "import/no-anonymous-default-export": "off",
     "no-console": [1, { "allow": ["error", "warn"] }],
     "no-debugger": 1,
     "class-methods-use-this": 0,
