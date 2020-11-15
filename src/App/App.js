@@ -1,10 +1,10 @@
 import React from 'react';
 import firebase from 'firebase/app';
+import { BrowserRouter as Router } from 'react-router-dom';
 import firebaseApp from '../Helpers/Data/connection';
 import './App.scss';
-import Auth from '../Components/Auth';
 import MyNavbar from '../Components/MyNavbar';
-import BoardContainer from '../Components/BoardContainer';
+import Routes from '../Helpers/Routes';
 
 firebaseApp();
 class App extends React.Component {
@@ -17,7 +17,7 @@ class App extends React.Component {
       if (user) {
         this.setState({ authed: true });
       } else {
-        this.setState({ authed: true });
+        this.setState({ authed: false });
       }
     });
   }
@@ -28,20 +28,12 @@ class App extends React.Component {
 
   render() {
     const { authed } = this.state;
-    const loadComponent = () => {
-      let component = '';
-      if (authed) {
-        component = <BoardContainer />;
-      } else {
-        component = <Auth />;
-      }
-      return component;
-    };
-
     return (
       <div className="App">
+        <Router>
         <MyNavbar authed={authed} />
-        {loadComponent()}
+        <Routes authed={authed} />
+      </Router>
       </div>
     );
   }
