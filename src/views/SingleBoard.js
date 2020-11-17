@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import pinData from '../Helpers/Data/PinBoardData';
-import boardData from '../Helpers/Data/BoardData';
+import { getSinglePin } from '../Helpers/Data/pinData';
+import { getSingleBoard, getBoardPins } from '../Helpers/Data/BoardData';
 import PinsCard from '../Components/Cards/PinsCard';
 
 class SingleBoard extends Component {
@@ -11,7 +11,7 @@ class SingleBoard extends Component {
 
   componentDidMount() {
     const boardId = this.props.match.params.id;
-    boardData.getSingleBoard(boardId).then((response) => {
+    getSingleBoard(boardId).then((response) => {
       this.setState({
         board: response,
       });
@@ -24,11 +24,10 @@ class SingleBoard extends Component {
   }
 
   getPins = (boardId) => (
-    boardData.getBoardPins(boardId).then((response) => {
-      console.warn(boardId);
+    getBoardPins(boardId).then((response) => {
       const pinArray = [];
       response.forEach((item) => {
-        pinArray.push(pinData.getSinglePin(item.pinId));
+        pinArray.push(getSinglePin(item.pinId));
       });
       return Promise.all([...pinArray]);
     })
@@ -36,9 +35,9 @@ class SingleBoard extends Component {
 
   render() {
     const { pins, board } = this.state;
-    const renderPins = () => (
+    const renderPinsToDom = () => (
       pins.map((pin) => (
-         <PinsCard key={pin.firebaseKey} pinData={pin} />
+         <PinsCard key={pin.firebaseKey} pin={pin}/>
       ))
     );
 
@@ -46,7 +45,7 @@ class SingleBoard extends Component {
       <div>
         <h1>{board.name}</h1>
         <div className='d-flex flex-wrap container'>
-          {renderPins()}
+          {renderPinsToDom()}
         </div>
       </div>
     );

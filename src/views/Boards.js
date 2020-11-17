@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Boards from '../Components/Cards/BoardCard';
-import boardData from '../Helpers/Data/BoardData';
+import { getBoards } from '../Helpers/Data/BoardData';
+import BoardForm from '../Components/Forms/BoardForm';
 
 class BoardArea extends Component {
   state = {
@@ -8,7 +9,11 @@ class BoardArea extends Component {
   }
 
   componentDidMount() {
-    boardData.getBoards().then((resp) => {
+    this.getBoards();
+  }
+
+  getBoards = () => {
+    getBoards().then((resp) => {
       this.setState({
         boards: resp,
       });
@@ -22,6 +27,7 @@ class BoardArea extends Component {
     );
     return (
       <>
+        <BoardForm onUpdate={this.getBoards}/>
       <div className='Boards d-flex flex-wrap'>
       {renderBoardsToDom()}
       </div>

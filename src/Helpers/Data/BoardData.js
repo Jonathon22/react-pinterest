@@ -27,15 +27,32 @@ const getBoardPins = (boardId) => new Promise((resolve, reject) => {
         pinArray.push(pinData[pin]);
       });
     }
-    console.warn(pinArray);
     resolve(pinArray);
   }).catch((error) => reject(error));
 });
 
-const getSingleBoard = (boardId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Boards/${boardId}.json`).then((response) => {
+const getSingleBoard = (firebaseKey) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/Boards/${firebaseKey}.json`).then((response) => {
     resolve(response.data);
   }).catch((error) => reject(error));
 });
 
-export default { getBoards, getBoardPins, getSingleBoard };
+const createBoard = (object) => new Promise((resolve, reject) => {
+  axios.post(`${baseUrl}/Boards.json`, object)
+    .then((response) => {
+      axios.patch(`${baseUrl}/boards/${response.data.name}.json`, { firebaseKey: response.data.name }).then(resolve);
+    }).catch((error) => reject(error));
+});
+
+const updateBoard = (object) => new Promise((resolve, reject) => {
+  axios.patch(`${baseUrl}/Boards/${object.firebaseKey}.json`, object)
+    .then(resolve).catch((error) => reject(error));
+});
+
+export {
+  getBoards,
+  getBoardPins,
+  getSingleBoard,
+  createBoard,
+  updateBoard,
+};
