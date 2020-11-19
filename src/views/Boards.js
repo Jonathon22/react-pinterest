@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Boards from '../Components/Cards/BoardCard';
 import { getBoards } from '../Helpers/Data/BoardData';
 import BoardForm from '../Components/Forms/BoardForm';
+import AppModal from '../Components/AppModal';
 
 class BoardArea extends Component {
   state = {
@@ -27,7 +28,9 @@ class BoardArea extends Component {
     );
     return (
       <>
+      <AppModal title={'Create Board'} buttonLabel={'Create Board'}>
         <BoardForm onUpdate={this.getBoards}/>
+      </AppModal>
       <div className='Boards d-flex flex-wrap'>
       {renderBoardsToDom()}
       </div>

@@ -18,40 +18,29 @@ const getBoards = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getBoardPins = (boardId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/pins-boards.json?orderBy="boardId"&equalTo="${boardId}"`).then((response) => {
-    const pinData = response.data;
-    const pinArray = [];
-    if (pinData) {
-      Object.keys(pinData).forEach((pin) => {
-        pinArray.push(pinData[pin]);
-      });
-    }
-    resolve(pinArray);
+const getAllBoards = (uid) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/Boards.json?orderBy="userId"&equalTo="${uid}"`).then((response) => {
+    resolve(Object.values(response.data));
   }).catch((error) => reject(error));
 });
 
-const getSingleBoard = (firebaseKey) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Boards/${firebaseKey}.json`).then((response) => {
+const getSingleBoard = (boardId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/Boards/${boardId}.json`).then((response) => {
     resolve(response.data);
   }).catch((error) => reject(error));
 });
 
-const createBoard = (object) => new Promise((resolve, reject) => {
-  axios.post(`${baseUrl}/Boards.json`, object)
-    .then((response) => {
-      axios.patch(`${baseUrl}/boards/${response.data.name}.json`, { firebaseKey: response.data.name }).then(resolve);
-    }).catch((error) => reject(error));
+const createBoard = (data) => axios.post(`${baseUrl}/Boards.json`, data).then((response) => {
+  const update = { firebaseKey: response.data.name };
+  axios.patch(`${baseUrl}/Boards/${response.data.name}.json`, update)
+    .catch((error) => console.warn(error));
 });
 
-const updateBoard = (object) => new Promise((resolve, reject) => {
-  axios.patch(`${baseUrl}/Boards/${object.firebaseKey}.json`, object)
-    .then(resolve).catch((error) => reject(error));
-});
+const updateBoard = (dataObject) => axios.patch(`${baseUrl}/boards/${dataObject.firebaseKey}.json`, dataObject);
 
 export {
   getBoards,
-  getBoardPins,
+  getAllBoards,
   getSingleBoard,
   createBoard,
   updateBoard,

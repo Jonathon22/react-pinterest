@@ -1,42 +1,35 @@
-import React, { Component } from 'react';
-import firebase from 'firebase/app';
+import React from 'react';
 import 'firebase/auth';
 import { Link } from 'react-router-dom';
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  Nav,
+  NavItem,
+} from 'reactstrap';
+import SearchInput from '../SearchInput';
 
-class MyNavbar extends Component {
-  logMeOut = (e) => {
-    e.preventDefault();
-    firebase.auth().signOut();
-  }
-
-  render() {
-    const { authed } = this.props;
-    return (
-      <div className="MyNavbar">
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <span className="navbar-brand" href="#">Pinterest</span>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li className="nav-item">
-             <Link to='/Boards'>Boards</Link>
-            </li>
-            <li className="nav-item">
-             <Link to='/Pins'>Pins</Link>
-            </li>
-            </ul>
-            <div className="form-inline my-2 my-lg-0">
-              { authed && (
-                <button className="nav-link btn btn-danger" onClick={this.logMeOut}>Logout</button>
-              )}
-            </div>
-          </div>
-        </nav>
-      </div>
-    );
-  }
+export default function MyNavbar(props) {
+  return (
+    <div>
+      <Navbar color='dark' dark expand='md' className='justify-content-between'>
+        <Link className="navbar-brand" to='/'>Pinterest</Link>
+        <NavbarToggler />
+        <Collapse navbar>
+          <Nav className='mr-auto' navbar>
+            <NavItem>
+              <Link className="nav-link" to='/boards'>Boards</Link>
+            </NavItem>
+            <NavItem>
+              <Link className="nav-link" to='/pins'>
+                Pins
+              </Link>
+            </NavItem>
+          </Nav>
+          <SearchInput />
+        </Collapse>
+      </Navbar>
+    </div>
+  );
 }
-
-export default MyNavbar;

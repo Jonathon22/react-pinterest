@@ -15,7 +15,7 @@ class Boards extends Component {
             <p className='card-text'>{board.description}</p>
             <p className='card-text'>
             </p>
-            <Link className='btn btn-warning' to={`/boards/${board.firebaseKey}`}>VIEW PINS</Link>
+            <Link className='btn btn-warning' to={`/Boards/${board.firebaseKey}`}>VIEW PINS</Link>
           </div>
           </div>
         </div>
