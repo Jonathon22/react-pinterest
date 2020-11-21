@@ -8,10 +8,39 @@ const getBoardPins = (boardId) => new Promise((resolve, reject) => {
   }).catch((error) => reject(error));
 });
 
-const getPin = (pinId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Pins/${pinId}.json`).then((response) => {
+const getAllUserPins = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${baseUrl}/Pins.json?orderBy="userid"&equalTo="${uid}"`).then((response) => {
+      resolve(Object.values(response.data));
+    })
+    .catch((error) => reject(error));
+});
+
+const getPins = () => new Promise((resolve, reject) => {
+  axios
+    .get(`${baseUrl}/Pins.json`)
+    .then((response) => {
+      const pins = response.data;
+      const pinsArray = [];
+      if (pins) {
+        Object.keys(pins).forEach((boardId) => {
+          pinsArray.push(pins[boardId]);
+        });
+      }
+      resolve(pinsArray);
+    })
+    .catch((error) => reject(error));
+});
+
+const getPin = (pinid) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/Pins/${pinid}.json`).then((response) => {
     resolve(response.data);
   }).catch((error) => reject(error));
 });
 
-export { getBoardPins, getPin };
+export {
+  getBoardPins,
+  getPin,
+  getAllUserPins,
+  getPins,
+};

@@ -18,7 +18,6 @@ class Boards extends Component {
   getBoards = () => {
     const currentUserId = getUid();
     getAllUserBoards(currentUserId).then((resp) => {
-      console.warn(resp);
       this.setState({
         boards: resp,
       }, this.setLoading);
