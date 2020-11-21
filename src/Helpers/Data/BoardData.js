@@ -18,8 +18,8 @@ const getBoards = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getAllBoards = (uid) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Boards.json?orderBy="userId"&equalTo="${uid}"`).then((response) => {
+const getAllUserBoards = (uid) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/Boards.json?orderBy="userid"&equalTo="${uid}"`).then((response) => {
     resolve(Object.values(response.data));
   }).catch((error) => reject(error));
 });
@@ -36,11 +36,11 @@ const createBoard = (data) => axios.post(`${baseUrl}/Boards.json`, data).then((r
     .catch((error) => console.warn(error));
 });
 
-const updateBoard = (dataObject) => axios.patch(`${baseUrl}/boards/${dataObject.firebaseKey}.json`, dataObject);
+const updateBoard = (dataObject) => axios.patch(`${baseUrl}/Boards/${dataObject.firebaseKey}.json`, dataObject);
 
 export {
+  getAllUserBoards,
   getBoards,
-  getAllBoards,
   getSingleBoard,
   createBoard,
   updateBoard,

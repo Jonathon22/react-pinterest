@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Boards from '../Components/Cards/BoardCard';
-import { getBoards } from '../Helpers/Data/BoardData';
+import { getAllUserBoards } from '../Helpers/Data/BoardData';
 import BoardForm from '../Components/Forms/BoardForm';
 import AppModal from '../Components/AppModal';
+import getUid from '../Helpers/Data/authData';
+import Loader from '../Components/Loader';
 
 class BoardArea extends Component {
   state = {
@@ -14,26 +16,33 @@ class BoardArea extends Component {
   }
 
   getBoards = () => {
-    getBoards().then((resp) => {
+    const currentUserId = getUid();
+    getAllUserBoards(currentUserId).then((resp) => {
+      console.warn(resp);
       this.setState({
         boards: resp,
-      });
+      }, this.setLoading);
     });
   }
 
   render() {
-    const { boards } = this.state;
+    const { boards, loading } = this.state;
     const renderBoardsToDom = () => (
       boards.map((board) => <Boards key={board.firebaseKey} board={board} />)
     );
     return (
       <>
-      <AppModal title={'Create Board'} buttonLabel={'Create Board'}>
-        <BoardForm onUpdate={this.getBoards}/>
-      </AppModal>
-      <div className='Boards d-flex flex-wrap'>
-      {renderBoardsToDom()}
-      </div>
+        { loading ? (
+          <Loader />
+        ) : (
+          <>
+          <AppModal buttonLabel={'Add Board'}title={'Add Board'} btnColor={'danger'} icon={'fa-plus-circle'} className='align-right'>
+            <BoardForm onUpdate={this.getBoards} />
+            </AppModal>
+          <h1 className='d-flex flex-wrap justify-content-center m-2'>Boards</h1>
+          <div className='d-flex flex-wrap justify-content-center container'>{renderBoardsToDom()}</div>
+          </>
+        )}
       </>
     );
   }

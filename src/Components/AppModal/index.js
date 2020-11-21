@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
+  Button, Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 
 const AppModal = (props) => {
@@ -27,6 +23,7 @@ const AppModal = (props) => {
          {props.children}
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </div>
