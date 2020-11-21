@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Boards from '../Components/Cards/BoardCard';
+import BoardCard from '../Components/Cards/BoardCard';
 import { getAllUserBoards } from '../Helpers/Data/BoardData';
 import BoardForm from '../Components/Forms/BoardForm';
 import AppModal from '../Components/AppModal';
 import getUid from '../Helpers/Data/authData';
 import Loader from '../Components/Loader';
 
-class BoardArea extends Component {
+class Boards extends Component {
   state = {
     boards: [],
   }
@@ -28,7 +28,7 @@ class BoardArea extends Component {
   render() {
     const { boards, loading } = this.state;
     const renderBoardsToDom = () => (
-      boards.map((board) => <Boards key={board.firebaseKey} board={board} />)
+      boards.map((board) => <BoardCard key={board.firebaseKey} board={board} />)
     );
     return (
       <>
@@ -36,7 +36,7 @@ class BoardArea extends Component {
           <Loader />
         ) : (
           <>
-          <AppModal buttonLabel={'Add Board'}title={'Add Board'} btnColor={'danger'} icon={'fa-plus-circle'} className='align-right'>
+          <AppModal className='d-flex flex-wrap justify-content-center m-2' title={'Create Board'} buttonLabel={'Create Board'}>
             <BoardForm onUpdate={this.getBoards} />
             </AppModal>
           <h1 className='d-flex flex-wrap justify-content-center m-2'>Boards</h1>
@@ -48,4 +48,4 @@ class BoardArea extends Component {
   }
 }
 
-export default BoardArea;
+export default Boards;

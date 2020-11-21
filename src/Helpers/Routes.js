@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Home from '../views/Home';
-import BoardArea from '../views/Boards';
+import Boards from '../views/Boards';
 import Pins from '../views/Pins';
 import SingleBoard from '../views/SingleBoard';
 import PinDetails from '../views/PinDetails';
@@ -14,8 +14,8 @@ export default function routes({ user }) {
   return (
           <Switch>
             <Route exact path='/' component={() => <Home user={user} />} />
-            <Route exact path='/Boards' component={() => <BoardArea user={user} />} />
-            <Route exact path='/Pins' component={Pins} user={user} />
+            <Route exact path='/Boards' component={() => <Boards user={user} />} />
+            <Route exact path='/Pins' component={() => <Pins user={user} />} />
             <Route exact path='/Boards/:id' component={(props) => <SingleBoard user={user} {...props}/>} />
             <Route exact path='/PinDetails' component={() => <PinDetails user={user} />} />
             <Route exact path='/BoardForm' component={() => <BoardForm user={user} />} />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-class Boards extends Component {
+class BoardCard extends Component {
   render() {
     const { board } = this.props;
     return (
@@ -23,4 +23,4 @@ class Boards extends Component {
   }
 }
 
-export default Boards;
+export default BoardCard;

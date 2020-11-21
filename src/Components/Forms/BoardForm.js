@@ -10,13 +10,13 @@ class BoardForm extends Component {
     name: this.props.board?.name || '',
     imageUrl: this.props.board?.imageUrl || '',
     description: this.props.board?.description || '',
-    userId: this.props.board?.userId || '',
+    userid: this.props.board?.userid || '',
   }
 
   componentDidMount() {
-    const userId = getUser();
+    const userid = getUser();
     this.setState({
-      userId,
+      userid,
     });
   }
 
@@ -25,7 +25,7 @@ class BoardForm extends Component {
       this.setState({ imageUrl: '' });
       console.warn(e.target.files);
       const storageRef = firebase.storage().ref();
-      const imageRef = storageRef.child(`pinterest/${this.state.userId}/${Date.now()}/${e.target.files[0].name}`);
+      const imageRef = storageRef.child(`pinterest/${this.state.userid}/${Date.now()}/${e.target.files[0].name}`);
 
       imageRef.put(e.target.files[0]).then((snapshot) => {
         snapshot.ref.getDownloadURL().then((imageUrl) => {
