@@ -39,7 +39,7 @@ class BoardForm extends Component {
     }
   }
 
-  handleSumbit = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.btn.setAttribute('disabled', 'disabled');
     if (this.state.firebaseKey === '') {
