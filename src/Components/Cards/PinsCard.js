@@ -5,7 +5,7 @@ class PinsCard extends React.Component {
   render() {
     const { pin } = this.props;
     return (
-      <div className='Pins mt-3 col-md-3 mb-3'>
+      <div className='main-card Pins mt-3 col-md-3 mb-3'>
         <div className='card'>
         <img className='card-img-top' src={pin.imageUrl} alt='Card cap' />
         <div className='card-body'>

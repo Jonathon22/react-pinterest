@@ -35,10 +35,10 @@ class Boards extends Component {
           <Loader />
         ) : (
           <>
-          <AppModal className='d-flex flex-wrap justify-content-center m-2' title={'Create Board'} buttonLabel={'Create Board'}>
+          <AppModal title={'Create Board'} buttonLabel={'Create Board'}>
             <BoardForm onUpdate={this.getBoards} />
             </AppModal>
-          <h1 className='d-flex flex-wrap justify-content-center m-2'>Boards</h1>
+          <h1 className='title d-flex flex-wrap justify-content-center m-2'>Boards</h1>
           <div className='d-flex flex-wrap justify-content-center container'>{renderBoardsToDom()}</div>
           </>
         )}

@@ -14,22 +14,22 @@ class MyNavbar extends Component {
     return (
       <div className="MyNavbar">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <span className="navbar-brand" href="#">Pinterest</span>
+          <span className="nav-text navbar-brand" href="#">Pinterest</span>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li className="nav-item">
+            <li className="nav-text nav-item m-2">
              <Link to='/Boards'>Boards</Link>
             </li>
-            <li className="nav-item">
+            <li className="nav-text nav-item m-2">
              <Link to='/Pins'>Pins</Link>
             </li>
             </ul>
             <div className="form-inline my-2 my-lg-0">
               { user && (
-                <button className="nav-link btn btn-danger" onClick={this.logMeOut}>Logout</button>
+                <button className="nav-link btn btn-warning" onClick={this.logMeOut}>Logout</button>
               )}
             </div>
           </div>
