@@ -9,11 +9,11 @@ class PinsCard extends React.Component {
         <div className='card'>
         <img className='card-img-top' src={pin.imageUrl} alt='Card cap' />
         <div className='card-body'>
-          <h5 className='card-title'>{pin.name}</h5>
+          <h5 className='card-text card-title'>{pin.name}</h5>
           <p className='card-text'>
             {pin.description}
           </p>
-          <Link className='btn btn-primary' to={`/Pins/${pin.firebaseKey}`}>
+          <Link className='btn btn-warning' to={`/Pins/${pin.firebaseKey}`}>
             Edit Pin
           </Link>
         </div>
