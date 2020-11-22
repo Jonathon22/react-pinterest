@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Home from '../views/Home';
 import Boards from '../views/Boards';
 import Pins from '../views/Pins';
