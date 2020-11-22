@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Outline&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chicle&display=swap');
+$border-radius-size: 5px;
+
+.main-card {
+  width: 100%;
+  display: inline-block;
+  margin: 20px;
+  border-radius: $border-radius-size ;
+  position: relative;
+  text-align: center;
+  box-shadow: -1px 15px 30px -12px black;
+  z-index: 5;
+}
+ .image {
+   position: sticky;
+  height: 100%;
+  margin-bottom: 35px;
+  border-top-left-radius: $border-radius-size;
+  border-top-right-radius: $border-radius-size;
+ }
+
+ .card-body {
+   background-color: grey;
+ }
+
+ .card-text {
+   font-size: 25px;
+   color: #ffc007;
+ font-family: 'Chicle', cursive;
+ }
+
+ .title {
+  font-family: 'Chicle', cursive;
+  font-size: 65px;
+   color: #ffc007;
+ }
+ 
+
+ .nav-text {
+   color: #ffc007;
+ }

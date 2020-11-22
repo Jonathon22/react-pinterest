@@ -16,10 +16,10 @@ const AppModal = (props) => {
 
   return (
     <div>
-      <Button className='d-flex flex-wrap justify-content-center m-2' color="warning" onClick={toggle}>{buttonLabel}</Button>
+      <Button color="warning" onClick={toggle}>{buttonLabel}</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>{title}</ModalHeader>
-        <ModalBody>
+        <ModalBody className='modal-body'>
          {props.children}
         </ModalBody>
         <ModalFooter>
