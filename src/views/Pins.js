@@ -28,6 +28,7 @@ class Pins extends Component {
 
     return (
     <>
+    <h1 className='d-flex flex-wrap justify-content-center m-2'>Pins</h1>
     <div className="d-flex flex-wrap justify-content-center container">{renderPinsToDom()}</div>
     </>
     );
