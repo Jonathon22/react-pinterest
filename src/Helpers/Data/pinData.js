@@ -58,10 +58,10 @@ const updatePin = (object) => new Promise((resolve, reject) => {
 
 export {
   getBoardPins,
-  getPin,
+  getPins,
   deletePinsOfBoards,
   getAllUserPins,
-  getPins,
+  getPin,
   createPin,
   deletePin,
   updatePin,
