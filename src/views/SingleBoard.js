@@ -1,6 +1,6 @@
 import React from 'react';
 import { getBoardPins, getPin } from '../Helpers/Data/pinData';
-import { getSingleBoard } from '../Helpers/Data/BoardData';
+import boardData from '../Helpers/Data/BoardData';
 import PinsCard from '../Components/Cards/PinsCard';
 
 export default class SingleBoard extends React.Component {
@@ -13,7 +13,7 @@ export default class SingleBoard extends React.Component {
     // 1. Pull boardId from URL params
     const boardId = this.props.match.params.id;
     // 2. Make a call to the API that gets the board info
-    getSingleBoard(boardId).then((response) => {
+    boardData.getSingleBoard(boardId).then((response) => {
       this.setState({
         board: response,
       });
