@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Boards from '../Components/Cards/BoardCard';
 import PinsCard from '../Components/Cards/PinsCard';
-import { getAllUserBoards } from '../Helpers/Data/BoardData';
+import boardData from '../Helpers/Data/BoardData';
 
 class SearchResults extends Component {
   state = {
@@ -19,7 +19,7 @@ class SearchResults extends Component {
       const searchType = this.props.match.params.type;
 
       if (searchType === 'boards') {
-        getAllUserBoards().then((resp) => {
+        boardData.getAllUserBoards().then((resp) => {
           this.setState({
             searchTerm,
             searchType,

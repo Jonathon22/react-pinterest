@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/storage';
 import getUser from '../../Helpers/Data/authData';
-import { updateBoard, createBoard } from '../../Helpers/Data/BoardData';
+import boardData from '../../Helpers/Data/BoardData';
 
 class BoardForm extends Component {
   state = {
@@ -43,7 +43,7 @@ class BoardForm extends Component {
     e.preventDefault();
     this.btn.setAttribute('disabled', 'disabled');
     if (this.state.firebaseKey === '') {
-      createBoard(this.state)
+      boardData.createBoard(this.state)
         .then(() => {
           this.props.onUpdate?.();
           this.setState({
@@ -51,7 +51,7 @@ class BoardForm extends Component {
           });
         });
     } else {
-      updateBoard(this.state)
+      boardData.updateBoard(this.state)
         .then(() => {
           this.props.onUpdate?.(this.props.board.firebaseKey);
           this.setState({
@@ -66,7 +66,7 @@ class BoardForm extends Component {
 
     return (
       <>
-      { success && (<div className="alert alert-danger" role="alert">Board Was Created</div>)
+      { success && (<div className="alert alert-danger" role="alert">Board Was Created/Updated</div>)
       }
       <form onSubmit={this.handleSubmit}>
         <h1 className='m-3'>Board Form</h1>

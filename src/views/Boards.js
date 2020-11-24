@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import BoardCard from '../Components/Cards/BoardCard';
-import { getAllUserBoards } from '../Helpers/Data/BoardData';
+import boardData from '../Helpers/Data/BoardData';
 import BoardForm from '../Components/Forms/BoardForm';
 import AppModal from '../Components/AppModal';
 import getUid from '../Helpers/Data/authData';
@@ -17,17 +17,29 @@ class Boards extends Component {
 
   getBoards = () => {
     const currentUserId = getUid();
-    getAllUserBoards(currentUserId).then((resp) => {
+    boardData.getAllUserBoards(currentUserId).then((resp) => {
       this.setState({
         boards: resp,
       }, this.setLoading);
     });
   }
 
+  deleteBoard = (e) => {
+    const removedBoard = this.state.boards.filter(
+      (board) => board.firebaseKey !== e.target.id,
+    );
+    this.setState({
+      boards: removedBoard,
+    });
+    boardData.deleteBoard(e.target.id).then(() => {
+      this.getBoards();
+    });
+  };
+
   render() {
     const { boards, loading } = this.state;
     const renderBoardsToDom = () => (
-      boards.map((board) => <BoardCard key={board.firebaseKey} board={board} />)
+      boards.map((board) => <BoardCard key={board.firebaseKey} board={board} deleteBoard={this.deleteBoard} />)
     );
     return (
       <>

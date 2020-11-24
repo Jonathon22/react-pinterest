@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 class BoardCard extends Component {
   render() {
-    const { board } = this.props;
+    const { board, deleteBoard } = this.props;
     return (
       <div className='main-card mt-3 col-md-3 mb-3'>
         <div className='card'>
@@ -16,6 +16,7 @@ class BoardCard extends Component {
             <p className='card-text'>
             </p>
             <Link className='btn btn-warning' to={`/Boards/${board.firebaseKey}`}>VIEW PINS</Link>
+            <button className='btn btn-danger m-1' id={board.firebaseKey} onClick={(e) => deleteBoard(e)}>Delete Board</button>
           </div>
           </div>
         </div>
