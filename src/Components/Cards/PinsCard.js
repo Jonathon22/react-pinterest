@@ -1,23 +1,30 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import AppModal from '../AppModal';
+import PinForm from '../Forms/PinForm';
 
 class PinsCard extends React.Component {
   render() {
-    const { pin } = this.props;
+    const { pin, removePin } = this.props;
     return (
-      <div className='main-card Pins mt-3 col-md-3 mb-3'>
-        <div className='card'>
-        <img className='card-img-top' src={pin.imageUrl} alt='Card cap' />
+      <div className='card m-3 w-300'>
+      <a href={pin.url}>
+        <img className='card-img-top board-img' src={pin.imageUrl} alt='Card cap'></img>
+      </a>
         <div className='card-body'>
-          <h5 className='card-text card-title'>{pin.name}</h5>
-          <p className='card-text'>
-            {pin.description}
-          </p>
-          <Link className='btn btn-warning' to={`/Pins/${pin.firebaseKey}`}>
-            Edit Pin
-          </Link>
+          <h5 className='card-title'>{pin.name}</h5>
+          <p className='card-text'>{pin.description}</p>
+          {(this.props.isOnHome !== true) ? (
+            <div className='d-flex justify-content-center'>
+          <button className='btn btn-danger mr-1' id={pin.firebaseKey} onClick={(e) => removePin(e)}>Delete Pin</button>
+          <AppModal title={'Edit Pin'} buttonLabel={'Edit Pin'} buttonColor={'success'}>
+            <PinForm onUpdate={this.getPins} pin={this.props.pin}/>
+          </AppModal>
+          </div>
+          ) : (
+            <div></div>
+          )
+          }
         </div>
-      </div>
       </div>
     );
   }

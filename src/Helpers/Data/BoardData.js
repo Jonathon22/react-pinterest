@@ -77,6 +77,16 @@ const deleteBoard = (boardFirebaseKey) => axios.delete(`${baseUrl}/Boards/${boar
 
 const deletePinBoard = (pinid) => axios.delete(`${baseUrl}/pin-boards/${pinid}.json`);
 
+const createBoardToPin = (obj) => new Promise((resolve, reject) => {
+  axios
+    .post(`${baseUrl}/pin-boards.json`, obj).then((response) => {
+      axios.patch(`${baseUrl}/pin-boards/${response.data.name}.json`, { firebaseKey: response.data.name })
+        .then((patchResponse) => {
+          resolve(patchResponse);
+        }).catch((error) => reject(error));
+    });
+});
+
 export default {
   getAllUserBoards,
   getBoards,
@@ -85,4 +95,5 @@ export default {
   updateBoard,
   deleteBoard,
   getBoardPins,
+  createBoardToPin,
 };

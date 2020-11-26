@@ -47,7 +47,7 @@ class Boards extends Component {
           <Loader />
         ) : (
           <>
-          <AppModal title={'Create Board'} buttonLabel={'Create Board'}>
+          <AppModal className='app-modal' title={'Create Board'} buttonLabel={'Create Board'}>
             <BoardForm onUpdate={this.getBoards} />
             </AppModal>
           <h1 className='title d-flex flex-wrap justify-content-center m-2'>Boards</h1>
