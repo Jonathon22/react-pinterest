@@ -58,14 +58,14 @@ class PinForm extends Component {
         imageUrl: this.state.imageUrl,
         url: this.state.url,
         firebaseKey: this.state.firebaseKey,
-        Userid: this.state.Userid,
+        userid: this.state.userid,
         private: this.state.private,
       };
       createPin(newPin).then((response) => {
         const pinBoard = {
           boardId: this.boardsRef.current.value,
           pinId: response.data.firebaseKey,
-          userid: this.state.Userid,
+          userid: this.state.userid,
         };
         boardData.createBoardToPin(pinBoard);
       }).then(() => {
