@@ -16,7 +16,7 @@ const AppModal = (props) => {
 
   return (
     <div>
-      <Button color="warning" onClick={toggle}>{buttonLabel}</Button>
+      <Button className='d-flex flex-wrap justify-content-center container' color="warning" onClick={toggle}>{buttonLabel}</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>{title}</ModalHeader>
         <ModalBody className='modal-body'>

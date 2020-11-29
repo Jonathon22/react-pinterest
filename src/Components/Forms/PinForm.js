@@ -3,7 +3,12 @@ import firebase from 'firebase/app';
 import 'firebase/storage';
 import getUser from '../../Helpers/Data/authData';
 import boardData from '../../Helpers/Data/BoardData';
-import { createPin, updatePin } from '../../Helpers/Data/pinData';
+import {
+  createPin,
+  updatePin,
+  deletePinsOfBoards,
+  addPinsOfBoards,
+} from '../../Helpers/Data/pinData';
 
 class PinForm extends Component {
   state = {
@@ -14,6 +19,7 @@ class PinForm extends Component {
     userid: this.props.pin?.userid || '',
     description: this.props.pin?.description || '',
     boards: [],
+    success: false,
   }
 
    boardsRef = React.createRef();
@@ -51,29 +57,65 @@ class PinForm extends Component {
     e.preventDefault();
 
     if (this.state.firebaseKey === '') {
-      createPin(this.state)
-        .then(() => {
-          this.props.onUpdate();
-          this.setState({
-            success: true,
-          });
+      const newPin = {
+        name: this.state.name,
+        description: this.state.description,
+        imageUrl: this.state.imageUrl,
+        firebaseKey: this.state.firebaseKey,
+        userid: this.state.userid,
+        private: this.state.private,
+      };
+      createPin(newPin).then((response) => {
+        const pinBoard = {
+          boardId: this.boardsRef.current.value,
+          pinId: response.data.firebaseKey,
+          userid: this.state.userid,
+        };
+        boardData.createBoardToPin(pinBoard);
+      }).then(() => {
+        this.props.onUpdate?.(this.props.boardId);
+        this.setState({
+          success: true,
         });
+      });
     } else {
-      updatePin(this.state)
+      boardData.getPinsBoards(this.state.firebaseKey).then((response) => {
+        response.forEach((item) => {
+          const newArray = Object.values(item);
+          if (newArray.includes(this.state.firebaseKey)) {
+            deletePinsOfBoards(item.firebaseKey);
+          }
+        });
+      });
+      const newPin = {
+        firebaseKey: this.state.firebaseKey,
+        description: this.state.description,
+        name: this.state.name,
+        imageUrl: this.state.imageUrl,
+        private: this.state.private.value,
+        userid: this.state.userid,
+        website: this.state.website,
+      };
+      updatePin(newPin).then((response) => {
+        const pinBoardObj = {
+          boardId: this.boardsRef.current.value,
+          pinId: response.data.firebaseKey,
+          userid: this.state.userid,
+        };
+        addPinsOfBoards(pinBoardObj);
+      })
         .then(() => {
-          this.props.onUpdate(this.state.firebaseKey);
-          this.setState({
-            success: true,
-          });
+          this.props.onUpdate?.(this.props.pin.firebaseKey);
+          this.setState({ success: true });
         });
     }
   };
 
   render() {
-    const { success } = this.state;
+    const { success, boards } = this.state;
     return (
       <>
-      { success && (<div className="alert alert-danger" role="alert">Board Was Created/Updated</div>)
+      { success && (<div className="alert alert-success" role="alert">Pin Was Updated/Created!</div>)
       }
       <form onSubmit={this.handleSubmit}>
         <h1>Pin Form</h1>
@@ -112,21 +154,22 @@ class PinForm extends Component {
           accept='image/*'
           onChange={this.handleChange}
         />
-        <div className='form-group'>
-          <label for='private'>Private or Public</label>
-          <select
-            className='form-control'
-            id='private'
-            name='private'
-            value={this.state.private}
-            onChange={this.handleChange}
-            require
-          >
-            <option>Private</option>
-            <option>Public</option>
-          </select>
-        </div>
-        <button>Submit</button>
+        <p>Set Pin To Public or Private</p>
+        <select
+          name='private'
+          className='form-control form-control-md'
+          value={this.state.private}
+          onChange={this.handleChange} >
+            <option value={'true'}>Private</option>
+            <option value={'false'}>Public</option>
+        </select>
+        <p className='select-board'>Select Board</p>
+        <select ref={this.boardsRef} className='form-control form-control-md'>
+        {Object.keys(boards).length && boards.map((board) => (
+              <option key={board.firebaseKey} value={board.firebaseKey}>{board.name}</option>
+        ))}
+        </select>
+        <button className='btn btn-success'>Submit</button>
       </form>
       </>
     );

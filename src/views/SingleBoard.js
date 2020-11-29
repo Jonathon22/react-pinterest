@@ -1,7 +1,9 @@
 import React from 'react';
-import { getBoardPins, getPin } from '../Helpers/Data/pinData';
+import { getBoardPins, getPin, deletePin } from '../Helpers/Data/pinData';
 import boardData from '../Helpers/Data/BoardData';
 import PinsCard from '../Components/Cards/PinsCard';
+import BoardForm from '../Components/Forms/BoardForm';
+import AppModal from '../Components/AppModal/index';
 
 export default class SingleBoard extends React.Component {
   state = {
@@ -10,50 +12,55 @@ export default class SingleBoard extends React.Component {
   };
 
   componentDidMount() {
-    // 1. Pull boardId from URL params
-    const boardId = this.props.match.params.id;
-    // 2. Make a call to the API that gets the board info
-    boardData.getSingleBoard(boardId).then((response) => {
+    const boardFirebaseKey = this.props.match.params.id;
+    this.getBoardInfo(boardFirebaseKey);
+    this.getPins(boardFirebaseKey).then((response) => {
+      this.setState({
+        pins: response,
+      });
+    });
+  }
+
+  getBoardInfo = (boardFirebaseKey) => {
+    boardData.getSingleBoard(boardFirebaseKey).then((response) => {
       this.setState({
         board: response,
       });
     });
-
-    // 3. Make a call to the API that returns the pins associated with this board and set to state.
-    this.getPins(boardId)
-      // because we did a promise.all, the response will not resolve until all the promises are completed
-      .then((resp) => (
-        this.setState({ pins: resp })
-      ));
   }
 
-  getPins = (boardId) => (
-    getBoardPins(boardId).then((response) => {
-      // an array that holds all of the calls to get the pin information
-      const pinArray = [];
+  getPins = (boardFirebaseKey) => (
+    getBoardPins(boardFirebaseKey).then((response) => {
+      const pinsArray = [];
       response.forEach((item) => {
-        // pushing a function that returns a promise into the pinArray
-        pinArray.push(getPin(item.pinId));
+        pinsArray.push(getPin(item.pinId));
       });
-      // returning an array of all the fullfilled promises
-      return Promise.all([...pinArray]);
+      return Promise.all([...pinsArray]);
     })
-  )
+  );
+
+  removePin = (e) => {
+    deletePin(e.target.id).then(() => {
+      this.getPins()
+        .then((resp) => {
+          this.setState({
+            pins: resp,
+          });
+        });
+    });
+  }
 
   render() {
     const { pins, board } = this.state;
     const renderPins = () => (
-      // 4. map over the pins in state
-      pins.map((pin) => (
-         <PinsCard key={pin.firebaseKey} pin={pin} />
-      ))
-    );
-
-    // 5. Render the pins on the DOM
+      pins.map((pin) => (<PinsCard key={pin.firebaseKey} pin={pin} removePin={this.removePin} isOnHome={true}/>)));
     return (
       <div>
+        <AppModal title={'Update Board'} buttonLabel={'Update Board'} buttonColor={'success'}>
+        { Object.keys(board).length && <BoardForm board={board} onUpdate={this.getBoardInfo} />}
+        </AppModal>
         <h1>{board.name}</h1>
-        <div className='d-flex flex-wrap container'>
+        <div className='d-flex flex-wrap justify-content-center'>
           {renderPins()}
         </div>
       </div>

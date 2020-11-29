@@ -1,4 +1,5 @@
 import axios from 'axios';
+import boardData from './BoardData';
 
 const baseUrl = 'https://react-pinterest-ce7b3.firebaseio.com';
 
@@ -8,9 +9,15 @@ const getBoardPins = (boardId) => new Promise((resolve, reject) => {
   }).catch((error) => reject(error));
 });
 
-const getAllUserPins = (uid) => new Promise((resolve, reject) => {
+const getPinsOnHome = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/Pins.json?orderBy="private"&equalTo=false`).then((response) => {
+    resolve(Object.values(response.data));
+  }).catch((error) => reject(error));
+});
+
+const getAllUserPins = (userid) => new Promise((resolve, reject) => {
   axios
-    .get(`${baseUrl}/Pins.json?orderBy="userid"&equalTo="${uid}"`).then((response) => {
+    .get(`${baseUrl}/Pins.json?orderBy="userid"&equalTo="${userid}"`).then((response) => {
       resolve(Object.values(response.data));
     })
     .catch((error) => reject(error));
@@ -32,14 +39,10 @@ const getPins = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getPin = (pinid) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Pins/${pinid}.json`).then((response) => {
+const getPin = (pinId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/Pins/${pinId}.json`).then((response) => {
     resolve(response.data);
   }).catch((error) => reject(error));
-});
-
-const deletePinsOfBoards = (firebaseKey) => new Promise((resolve, reject) => {
-  axios.delete(`${baseUrl}/pins-boards/${firebaseKey}.json`).then((response) => { if (response.statusText === 'OK') { resolve(0); } }).catch((error) => reject(error));
 });
 
 const createPin = (object) => new Promise((resolve, reject) => {
@@ -49,20 +52,47 @@ const createPin = (object) => new Promise((resolve, reject) => {
     }).catch((error) => reject(error));
 });
 
-const deletePin = (pinuid) => axios.delete(`${baseUrl}/Pins/${pinuid}.json`);
+const deletePin = (pinId) => axios.delete(`${baseUrl}/Pins/${pinId}.json`);
 
 const updatePin = (object) => new Promise((resolve, reject) => {
   axios.patch(`${baseUrl}/Pins/${object.firebaseKey}.json`, object)
     .then(resolve).catch((error) => reject(error));
 });
 
+const deleteBoardPin = (pinId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/pins-boards.json?orderBy="pinId"&equalTo="${pinId}"`)
+    .then((response) => {
+      const responseArray = Object.values(response);
+      responseArray.forEach((respArr) => {
+        const pinBoardIdsArray = Object.keys(respArr);
+        pinBoardIdsArray.forEach((id) => {
+          boardData.deletePinBoard(id);
+        });
+      });
+    });
+});
+
+const deletePinsOfBoards = (firebaseKey) => new Promise((resolve, reject) => {
+  axios.delete(`${baseUrl}/pins-boards/${firebaseKey}.json`).then((response) => { if (response.statusText === 'OK') { resolve(0); } }).catch((error) => reject(error));
+});
+
+const addPinsOfBoards = (dataObject) => new Promise((resolve, reject) => {
+  axios.post(`${baseUrl}/pins-boards.json`, dataObject).then((response) => {
+    const update = { firebaseKey: response.data.name };
+    axios.patch(`${baseUrl}/pins-boards/${response.data.name}.json`, update);
+  }).catch((error) => reject(error));
+});
+
 export {
   getBoardPins,
+  getPinsOnHome,
   getPins,
-  deletePinsOfBoards,
+  deleteBoardPin,
   getAllUserPins,
   getPin,
   createPin,
   deletePin,
   updatePin,
+  deletePinsOfBoards,
+  addPinsOfBoards,
 };
