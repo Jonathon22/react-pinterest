@@ -3,7 +3,12 @@ import firebase from 'firebase/app';
 import 'firebase/storage';
 import getUser from '../../Helpers/Data/authData';
 import boardData from '../../Helpers/Data/BoardData';
-import { createPin, deleteBoardPin, updatePin } from '../../Helpers/Data/pinData';
+import {
+  createPin,
+  updatePin,
+  deletePinsOfBoards,
+  addPinsOfBoards,
+} from '../../Helpers/Data/pinData';
 
 class PinForm extends Component {
   state = {
@@ -56,7 +61,6 @@ class PinForm extends Component {
         name: this.state.name,
         description: this.state.description,
         imageUrl: this.state.imageUrl,
-        url: this.state.url,
         firebaseKey: this.state.firebaseKey,
         userid: this.state.userid,
         private: this.state.private,
@@ -75,28 +79,35 @@ class PinForm extends Component {
         });
       });
     } else {
-      deleteBoardPin(this.state.firebaseKey);
-      const updatedPin = {
-        name: this.state.name,
-        description: this.state.description,
-        imageUrl: this.state.imageUrl,
-        firebaseKey: this.state.firebaseKey,
-        url: this.state.url,
-        userid: this.state.userid,
-        private: this.state.private,
-      };
-      updatePin(updatedPin).then(() => {
-        const updatedPinBoard = {
-          boardId: this.boardsRef.current.value,
-          pinId: this.state.firebaseKey,
-          userid: this.state.Userid,
-        };
-        boardData.createBoardToPin(updatedPinBoard);
-        this.props.onUpdate?.(this.props.pin.firebaseKey);
-        this.setState({
-          success: true,
+      boardData.getPinsBoards(this.state.firebaseKey).then((response) => {
+        response.forEach((item) => {
+          const newArray = Object.values(item);
+          if (newArray.includes(this.state.firebaseKey)) {
+            deletePinsOfBoards(item.firebaseKey);
+          }
         });
       });
+      const newPin = {
+        firebaseKey: this.state.firebaseKey,
+        description: this.state.description,
+        name: this.state.name,
+        imageUrl: this.state.imageUrl,
+        private: this.state.private.value,
+        userid: this.state.userid,
+        website: this.state.website,
+      };
+      updatePin(newPin).then((response) => {
+        const pinBoardObj = {
+          boardId: this.boardsRef.current.value,
+          pinId: response.data.firebaseKey,
+          userid: this.state.userid,
+        };
+        addPinsOfBoards(pinBoardObj);
+      })
+        .then(() => {
+          this.props.onUpdate?.(this.props.pin.firebaseKey);
+          this.setState({ success: true });
+        });
     }
   };
 
@@ -104,7 +115,7 @@ class PinForm extends Component {
     const { success, boards } = this.state;
     return (
       <>
-      { success && (<div className="alert alert-success" role="alert">Pin Was Updated!</div>)
+      { success && (<div className="alert alert-success" role="alert">Pin Was Updated/Created!</div>)
       }
       <form onSubmit={this.handleSubmit}>
         <h1>Pin Form</h1>

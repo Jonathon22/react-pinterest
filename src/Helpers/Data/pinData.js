@@ -10,14 +10,14 @@ const getBoardPins = (boardId) => new Promise((resolve, reject) => {
 });
 
 const getPinsOnHome = () => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/Pins.json?orderBy="private"&equalTo="false"`).then((response) => {
+  axios.get(`${baseUrl}/Pins.json?orderBy="private"&equalTo=false`).then((response) => {
     resolve(Object.values(response.data));
   }).catch((error) => reject(error));
 });
 
-const getAllUserPins = (uid) => new Promise((resolve, reject) => {
+const getAllUserPins = (userid) => new Promise((resolve, reject) => {
   axios
-    .get(`${baseUrl}/Pins.json?orderBy="userid"&equalTo="${uid}"`).then((response) => {
+    .get(`${baseUrl}/Pins.json?orderBy="userid"&equalTo="${userid}"`).then((response) => {
       resolve(Object.values(response.data));
     })
     .catch((error) => reject(error));
@@ -60,7 +60,7 @@ const updatePin = (object) => new Promise((resolve, reject) => {
 });
 
 const deleteBoardPin = (pinId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/pin-boards.json?orderBy="pinId"&equalTo="${pinId}"`)
+  axios.get(`${baseUrl}/pins-boards.json?orderBy="pinId"&equalTo="${pinId}"`)
     .then((response) => {
       const responseArray = Object.values(response);
       responseArray.forEach((respArr) => {
@@ -70,6 +70,17 @@ const deleteBoardPin = (pinId) => new Promise((resolve, reject) => {
         });
       });
     });
+});
+
+const deletePinsOfBoards = (firebaseKey) => new Promise((resolve, reject) => {
+  axios.delete(`${baseUrl}/pins-boards/${firebaseKey}.json`).then((response) => { if (response.statusText === 'OK') { resolve(0); } }).catch((error) => reject(error));
+});
+
+const addPinsOfBoards = (dataObject) => new Promise((resolve, reject) => {
+  axios.post(`${baseUrl}/pins-boards.json`, dataObject).then((response) => {
+    const update = { firebaseKey: response.data.name };
+    axios.patch(`${baseUrl}/pins-boards/${response.data.name}.json`, update);
+  }).catch((error) => reject(error));
 });
 
 export {
@@ -82,4 +93,6 @@ export {
   createPin,
   deletePin,
   updatePin,
+  deletePinsOfBoards,
+  addPinsOfBoards,
 };

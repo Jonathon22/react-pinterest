@@ -25,12 +25,6 @@ class Pins extends Component {
   }
 
   removePin = (e) => {
-    const removedPin = this.state.pins.filter(
-      (pin) => pin.firebaseKey !== e.target.id,
-    );
-    this.setState({
-      pins: removedPin,
-    });
     deletePin(e.target.id).then(() => {
       this.getPins();
     });
@@ -39,7 +33,7 @@ class Pins extends Component {
   render() {
     const { pins } = this.state;
     const renderPinsToDom = () => (
-      pins.map((pin) => <PinsCard key={pin.firebaseKey} pin={pin} removePin={this.removePin} />)
+      pins.map((pin) => <PinsCard key={pin.firebaseKey} pin={pin} onUpdate={this.getPins} removePin={this.removePin} />)
     );
 
     return (
